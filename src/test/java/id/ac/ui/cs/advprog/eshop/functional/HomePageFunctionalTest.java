@@ -35,7 +35,6 @@ public class HomePageFunctionalTest {
     //Snake case is used for testing names in java, Due to longer names
     @Test
     void PageTitle_isCorrect(ChromeDriver driver)throws Exception{
-        //TODO
         driver.get(baseUrl);
         String pageTitle = driver.getTitle();
 
@@ -45,7 +44,6 @@ public class HomePageFunctionalTest {
 
     @Test
     void welcomeMessage_homePage_isCorrect(ChromeDriver driver)throws Exception{
-        //TODO
         driver.get(baseUrl);
         String welcomeMessage = driver.findElement(By.id("welcomeMessage")).getText();
 
