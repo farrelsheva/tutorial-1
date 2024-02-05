@@ -25,6 +25,14 @@ public class ProductServiceImpl implements ProductService{
         productRepository.deleteById(productId);
     }
 
+    public Product findById(String productId){
+        return productRepository.findById(productId);
+    }
+
+    public void editById(String productId, Product product){
+        productRepository.editById(productId, product);
+    }
+
     @Override
     public List<Product> findAll(){
         Iterator<Product> productIterator = productRepository.findAll();

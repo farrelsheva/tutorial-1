@@ -30,6 +30,24 @@ public class ProductRepository {
         return null;
     }
 
+    public Product findById(String productId){
+        for(Product product : productData){
+            if(product.getProductId().equals(productId)){
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public void editById(String productId, Product product){
+        for(int i = 0; i < productData.size(); i++){
+            if(productData.get(i).getProductId().equals(productId)){
+                productData.set(i, product);
+                return;
+            }
+        }
+    }
+
     public Iterator<Product> findAll(){
         return productData.iterator();
     }
