@@ -13,7 +13,7 @@ public class ProductTest {
     void setUp() {
         this.product = new Product();
         this.product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        this.product.setProductName("American Red Velvet");
+        this.product.setProductName("Sambo Cap Bambang");
         this.product.setProductQuantity(100);
     }
 
@@ -24,7 +24,7 @@ public class ProductTest {
 
     @Test
     void testGetProductName() {
-        assertEquals("American Red Velvet", this.product.getProductName());
+        assertEquals("Sambo Cap Bambang", this.product.getProductName());
     }
 
     @Test
