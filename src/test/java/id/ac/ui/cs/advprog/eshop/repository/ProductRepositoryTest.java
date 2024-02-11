@@ -120,6 +120,30 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    void testFindbyId(){
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sambo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product savedProduct = productRepository.findById(product.getProductId());
+        assertEquals(product.getProductId(), savedProduct.getProductId());
+    }
+
+    @Test
+    void testFindByIdIfNotFound(){
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sambo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product savedProduct = productRepository.findById("a0f9de46-90b1-437d-aObf-d0821dde9096");
+        assertNull(savedProduct);
+    }
+
+    @Test
     void testEditbyId(){
         Product product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
