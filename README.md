@@ -1,3 +1,5 @@
+App url : https://swag-farrelsheva.koyeb.app
+
 ### Refleksi 1 
 
 Dalam mengerjakan Exercise 1, saya berpikir ada kepentinganya dalam cara kita bisa membuat proses untuk membangun aplikasi dan menambahkan fitur
