@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/product")
@@ -30,8 +32,13 @@ public class ProductController {
     }
 
     @GetMapping("/delete/{productId}")
-    public String deleteProduct(@PathVariable String productId){
-        service.deleteById(productId);
+    public String deleteProduct(@PathVariable String productId, RedirectAttributes redirectAttributes){
+        try{
+            service.deleteById(productId);
+        }catch (NoSuchElementException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/product/list";
+        }
         return "redirect:/product/list";
     }
 
