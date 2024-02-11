@@ -19,3 +19,16 @@ Hal ini memastikan kita bisa mengisolasi error yang terjadi dan mendebug dengan 
 2. Dengan menduplikasi Setup dan Prosedur yang kita sudah pernah buat, kita akan melawan prinsip DRY (*Don't Repeat Yourself*) yang membuat codebase susah untuk dimaintain, dan dimodifikasi dikarenakan modularitas yang berantakan.
 Menduplikasi setup juga merugikan aspek *Readibliity*, bayangkan jika sebuah programmer yang ingin memodifikasi codebase harus membaca dua class yang sangat mirip dengan perbedaan yang minim, ini pasti akan menghabiskan banyak waktu dan energi.
 Salah satu solusi yang saya bisa pikirkan merupakan pengidentifikasian setup yang sama di semua test suites yang kita buat, dan lalu membuat sebuah base class yang bisa dibagikan, ini akan mengurangi duplikasi dan membuat codebase lebih consistent.
+
+### Refleksi 3
+1. Setelah menggunakan PMD sebagai code analysis tool, ada beberapa quality issue yang dideteksi:
+- **Unused Imports**: ruleset PMD tidak menyukai imports dimana * digunakan jika hanya satu atau dua class dari module yang digunakan, ini bisa dihilangkan dengan mudah
+- **Unnecessary modifier 'public'**: Pada interface service layer, saya memakai public modifier untuk semua method, ini bisa dihilangkan karena semua method pada interface secara default public
+
+2. Secara teknis sudah, namun merupakan sebuah bentuk yang sangat primitif. Aplikasi yang dibuild tidak mempunyai dokumentasi yang cukup ataupun version control yang merupakan hal penting dalam operasi Devops.
+Tetapi semua hal esential dalam CI/CD sudah terpenuhi, seperti:
+- Source code dalam single repository
+- Code Main branch yang digunakan untuk deployment
+- Unit Test yang dijalankan sebelum deployment secara otomatis
+- Deployment yang otomatis
+- Monitoring yang otomatis
