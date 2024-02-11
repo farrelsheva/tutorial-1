@@ -5,6 +5,7 @@ import id.ac.ui.cs.advprog.eshop.service.ProdcutServiceImplTest;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,6 +15,7 @@ import java.util.*;
 
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +42,10 @@ public class ProductControllerTest {
             products.add(product);
         }
         when(productService.findAll()).thenReturn(products);
+
+        // for findById
+        Product specificProduct = products.get(1);
+        when(productService.findById("ID1")).thenReturn(specificProduct);
     }
 
     @Test
@@ -134,9 +140,73 @@ public class ProductControllerTest {
 
     @Test
     public void testDeleteProduct_NotFound() throws Exception {
+        doThrow(new NoSuchElementException("Product with id ID500 not found")).when(productService).deleteById("ID500");
         mockMvc.perform(get("/product/delete/ID500"))
-                        .andExpect(status().isNotFound());
-
-        verify(productService, times(0)).deleteById("ID500");
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(redirectedUrl("/product/list"))
+                        .andExpect(flash().attributeExists("errorMessage"));
+        verify(productService, times(1)).deleteById("ID500");
     }
+
+    @Test
+    public void testEditProductPage() throws Exception{
+
+        mockMvc.perform(get("/product/edit/ID1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("editProduct"))
+                .andExpect(model().attributeExists("product"));
+
+        // the getmapping should call findById to get the product
+        verify(productService, times(1)).findById("ID1");
+    }
+
+    @Test
+    public void testEditProductPage_Post() throws Exception {
+        ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
+        String productId = "ID1";
+        String productName = "Test Product";
+        int productQuantity = 10000;
+
+        mockMvc.perform(post("/product/edit/{productId}", productId)
+                        .param("productName", productName)
+                        .param("productQuantity", String.valueOf(productQuantity)))
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(redirectedUrl("/product/list"));
+
+
+        verify(productService, times(1)).editById(eq(productId), productCaptor.capture());
+        Product capturedProduct = productCaptor.getValue();
+        assertEquals(productName, capturedProduct.getProductName());
+        assertEquals(productQuantity, capturedProduct.getProductQuantity());
+    }
+
+    @Test
+    public void testEditProductPage_PostBadRequest() throws Exception {
+        mockMvc.perform(post("/product/edit/ID1")
+                .param("productName", "Test Product")
+                .param("productQuantity", "Wrong"))
+                .andExpect(status().isBadRequest());
+
+        verify(productService, times(0)).editById(any(), any());
+    }
+
+    @Test
+    public void testEditProductPage_PostNotFound() throws Exception {
+         String nullProductId = "ID500";
+         Product mockProduct = new Product();
+         mockProduct.setProductName("Test Product");
+         mockProduct.setProductQuantity(100);
+
+         when(productService.findById(nullProductId)).thenReturn(null);
+
+         mockMvc.perform(post("/product/edit/{productId}", nullProductId)
+                        .param("productName", "Test Product")
+                        .param("productQuantity", "100"))
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(redirectedUrl("/product/list"));
+
+         verify(productService, never()).editById(anyString(), any());
+
+    }
+
 }

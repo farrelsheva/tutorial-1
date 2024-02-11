@@ -79,27 +79,34 @@ public class ProdcutServiceImplTest {
     }
 
     @Test
-    public void testDeleteProductById() {
-        Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product.setProductName("Sambo Cap Bambang");
-        product.setProductQuantity(100);
+    public void testDeleteProductByIdSucess() {
+        String existingProductId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+        Product existingProduct = new Product();
+        existingProduct.setProductId(existingProductId);
 
-        // Assuming the product is now in the repository, simulate finding it
-        when(productRepository.findById(product.getProductId())).thenReturn(product);
+        when(productRepository.deleteById(existingProductId)).thenReturn(existingProduct);
 
-        assertNotNull(productRepository.findById(product.getProductId()), "Product should be found before deletion");
+        productServiceImpl.deleteById(existingProductId);
 
-        // Simulate deletion by ensuring subsequent find calls return null
-        doAnswer(invocation -> {
-            when(productRepository.findById(product.getProductId())).thenReturn(null);
-            return null; // Mimicking void methods, return null for doAnswer
-        }).when(productRepository).deleteById(product.getProductId());
 
-        productServiceImpl.deleteById(product.getProductId());
+        verify(productRepository, times(1)).deleteById(existingProductId);
 
-        assertNull(productRepository.findById(product.getProductId()), "Product should not be found after deletion");
     }
+
+    @Test
+    public void testDeleteProductById_NonExistent() {
+        String nonexistentProductId = "nonexistent-product-id";
+
+        when(productRepository.deleteById(nonexistentProductId)).thenReturn(null);
+
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            productServiceImpl.deleteById(nonexistentProductId);
+        });
+
+        assertTrue(exception.getMessage().contains("Product with id " + nonexistentProductId + " not found"));
+        verify(productRepository, times(1)).deleteById(nonexistentProductId);
+    }
+
 
     @Test
     void testEditProductById() {

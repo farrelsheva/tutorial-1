@@ -50,7 +50,12 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{productId}")
-    public String editProductPost(@PathVariable String productId, @ModelAttribute Product product){
+    public String editProductPost(@PathVariable String productId, @ModelAttribute Product product, RedirectAttributes redirectAttributes){
+        Product existingProduct = service.findById(productId);
+        if(existingProduct == null){
+            redirectAttributes.addFlashAttribute("errorMessage", "Product not found");
+            return "redirect:/product/list";
+        }
         service.editById(productId, product);
         return "redirect:/product/list";
     }
