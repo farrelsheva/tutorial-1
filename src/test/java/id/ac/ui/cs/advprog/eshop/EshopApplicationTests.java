@@ -10,4 +10,10 @@ class EshopApplicationTests {
     void contextLoads() {
     }
 
+    // Test class added ONLY to cover main() invocation not covered by application tests.
+    @Test
+    void main() {
+        EshopApplication.main(new String[] {});
+    }
+
 }
