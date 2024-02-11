@@ -1,6 +1,7 @@
 plugins {
     java
     jacoco
+    id("pmd")
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
 }
@@ -26,6 +27,8 @@ val seleniumJavaVersion = "4.14.1"
 val seleniumJupiterVersion = "5.0.1"
 val webdrivermanagerVersion = "5.6.3"
 val junitJupiterVersion = "5.9.1"
+val pmdVersion = "7.0.0-rc4"
+
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -41,6 +44,13 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
+
+pmd{
+    toolVersion = pmdVersion
+    isIgnoreFailures = false
+}
+
+
 tasks.register<Test>("unitTest"){
     description = "Runs unit tests"
     group = "verification"
