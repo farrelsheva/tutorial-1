@@ -114,7 +114,7 @@ class CarController extends ProductController{
         return "redirect:listCar";
     }
 
-    @PostMapping
+    @PostMapping("/deleteCar")
     public String deleteCar(@RequestParam("carId") String carId){
         carService.deleteCarById(carId);
         return "redirect:listCar";
