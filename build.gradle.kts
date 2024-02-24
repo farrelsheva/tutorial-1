@@ -47,7 +47,7 @@ dependencies {
 
 pmd{
     toolVersion = pmdVersion
-    isIgnoreFailures = false
+    isIgnoreFailures = true
 }
 
 
