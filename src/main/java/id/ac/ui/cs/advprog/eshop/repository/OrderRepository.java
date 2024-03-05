@@ -10,15 +10,36 @@ import java.util.List;
 public class OrderRepository {
     private List<Order> orderData = new ArrayList<>();
     public Order save(Order order){
-        return null;
+        int i = 0;
+        for (Order saved: orderData){
+            if (saved.getId().equals(order.getId())){
+                orderData.set(i, order);
+                return order;
+            }
+            i += 1;
+        }
+
+        orderData.add(order);
+        return order;
     }
 
     public Order findById(String Id){
+        for (Order saved: orderData){
+            if (saved.getId().equals(Id)){
+                return saved;
+            }
+        }
         return null;
     }
 
     public List<Order> findAllByAuthor(String author){
-        return null;
+        List<Order> result = new ArrayList<>();
+        for (Order saved: orderData){
+            if (saved.getAuthor().equals(author)){
+                result.add(saved);
+            }
+        }
+        return result;
     }
 
 }

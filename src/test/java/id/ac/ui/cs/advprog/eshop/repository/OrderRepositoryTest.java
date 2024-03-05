@@ -43,7 +43,7 @@ public class OrderRepositoryTest {
 
     @Test
     void testSaveCreate(){
-        Order order = orders.get(0);
+        Order order = orders.get(1);
         Order result = orderRepository.save(order);
 
         Order findResult = orderRepository.findById(orders.get(1).getId());
