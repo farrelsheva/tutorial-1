@@ -1,9 +1,15 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
+import id.ac.ui.cs.advprog.eshop.model.Order;
+import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderRepositoryTest {
     OrderRepository orderRepository;
@@ -93,7 +99,7 @@ public class OrderRepositoryTest {
             orderRepository.save(order);
         }
 
-        List<Order> orderList = orderRepository.findAllbyAuthor(
+        List<Order> orderList = orderRepository.findAllByAuthor(
                 orders.get(1).getAuthor());
         assertEquals(2, orderList.size());
     }
@@ -102,7 +108,7 @@ public class OrderRepositoryTest {
     void testFindAllByAuthorIfAllLowercase(){
         orderRepository.save(orders.get(1));
 
-        List<Order> orderList = orderRepository.findAllbyAuthor(
+        List<Order> orderList = orderRepository.findAllByAuthor(
                 orders.get(1).getAuthor().toLowerCase());
         assertTrue(orderList.isEmpty());
     }
