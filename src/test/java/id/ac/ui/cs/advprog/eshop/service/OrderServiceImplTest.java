@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -99,7 +100,7 @@ public class OrderServiceImplTest {
     void testUpdateStatusInvalidOrderId(){
         doReturn(null).when(orderRepository).findById("LOL");
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> orderService.updateStatus("LOL", OrderStatus.SUCCESS.getValue()));
 
         verify(orderRepository, times(0)).save(any(Order.class));
